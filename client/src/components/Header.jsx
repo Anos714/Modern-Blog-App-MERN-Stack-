@@ -3,15 +3,15 @@ import { assets } from "../assets/asset";
 import { IoSearch, IoMenu, IoClose } from "react-icons/io5";
 import { MdLightMode, MdDarkMode } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 
 const Header = () => {
-  const [darkMode, setDarkMode] = useState(true);
+  const { themeMode, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   return (
-    
-    <div className={darkMode ? "dark" : ""}>
+    <div>
       <div className="h-20 flex justify-between items-center px-4 md:px-10 border-b-2 relative z-50 transition-colors duration-300 bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-600">
         <div className="flex-shrink-0">
           <img
@@ -49,16 +49,19 @@ const Header = () => {
         <div className="flex gap-4 items-center">
           <div
             className="h-10 w-10 rounded-full flex justify-center items-center cursor-pointer transition-colors bg-gray-200 dark:bg-gray-700"
-            onClick={() => setDarkMode(!darkMode)}
+            onClick={toggleTheme}
           >
-            {darkMode ? (
+            {themeMode === "dark" ? (
               <MdLightMode className="text-2xl text-yellow-300" />
             ) : (
               <MdDarkMode className="text-2xl text-gray-700" />
             )}
           </div>
 
-          <button className="hidden md:block bg-blue-700 w-25 h-10 px-4 rounded-sm text-white font-semibold hover:scale-105 transition-all cursor-pointer">
+          <button
+            className="hidden md:block bg-blue-700 w-25 h-10 px-4 rounded-sm text-white font-semibold hover:scale-105 transition-all cursor-pointer"
+            onClick={() => navigate("/signin")}
+          >
             Sign In
           </button>
 
@@ -82,20 +85,30 @@ const Header = () => {
             </form>
 
             <ul className="flex flex-col gap-5 list-none text-center">
-              {["Home", "About"].map((item) => (
-                <li key={item}>
-                  <a
-                    href={`/${item.toLowerCase()}`}
-                    className="font-semibold text-xl transition-all cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <a
+                  href="/"
+                  className="font-semibold text-xl transition-all cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Home
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/about"
+                  className="font-semibold text-xl transition-all cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  About
+                </a>
+              </li>
             </ul>
 
-            <button className="bg-blue-700 w-3/4 h-10 rounded-sm text-white font-semibold hover:bg-blue-600 transition-all cursor-pointer">
+            <button
+              className="bg-blue-700 w-3/4 h-10 rounded-sm text-white font-semibold hover:bg-blue-600 transition-all cursor-pointer"
+              onClick={() => navigate("/signin")}
+            >
               Sign In
             </button>
           </div>
