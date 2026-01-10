@@ -10,7 +10,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    // 👇 Parent div par 'dark' class toggle hogi. Iske andar 'dark:' classes automatically active ho jayengi.
+    
     <div className={darkMode ? "dark" : ""}>
       <div className="h-20 flex justify-between items-center px-4 md:px-10 border-b-2 relative z-50 transition-colors duration-300 bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-600">
         <div className="flex-shrink-0">
