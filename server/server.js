@@ -3,6 +3,8 @@ import "dotenv/config";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { connectToDB } from "./database/db.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
+import { authRouter } from "./routes/auth.route.js";
 const app = express();
 const PORT = process.env.PORT || 8000;
 
@@ -17,12 +19,10 @@ app.use(
   })
 );
 
-app.use("/", (req, res) => {
-  return res.status(200).json({
-    success: true,
-    msg: "api is working",
-  });
-});
+//routes
+app.use("/api/user", authRouter);
+
+app.use(errorHandler);
 
 connectToDB()
   .then(() => {
