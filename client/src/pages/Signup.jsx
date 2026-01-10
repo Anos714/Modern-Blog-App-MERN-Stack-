@@ -3,7 +3,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "../validation";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom"; // Link import kiya
+import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Signup = () => {
   const {
@@ -15,9 +16,10 @@ const Signup = () => {
     mode: "onChange",
   });
 
+  const { handleSignup } = useAuth();
+
   const handleFormSubmit = async (data) => {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log("Form Success:", data);
+    handleSignup(data);
   };
 
   const handleGoogleLogin = () => {
@@ -26,7 +28,6 @@ const Signup = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
-      {/* Padding p-8 se p-6 kiya aur space-y-8 se space-y-6 kiya height kam karne ke liye */}
       <div className="max-w-sm w-full space-y-6 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 transition-colors duration-300">
         <div className="text-center">
           <h2 className="mt-2 text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
@@ -38,10 +39,9 @@ const Signup = () => {
         </div>
 
         <form
-          className="mt-6 space-y-4" // Margin aur Spacing kam ki
+          className="mt-6 space-y-4"
           onSubmit={handleSubmit(handleFormSubmit)}
         >
-          {/* Inputs ke beech ka gap thoda kam kiya (space-y-3) */}
           <div className="space-y-3">
             <div>
               <label

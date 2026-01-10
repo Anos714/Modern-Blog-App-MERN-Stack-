@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signinSchema } from "../validation";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Signin = () => {
   const {
@@ -15,9 +16,10 @@ const Signin = () => {
     mode: "onChange",
   });
 
+  const { handleSignin } = useAuth();
+
   const handleFormSubmit = async (data) => {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log("Login Success:", data);
+    handleSignin(data);
   };
 
   const handleGoogleLogin = () => {

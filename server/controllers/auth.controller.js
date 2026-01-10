@@ -51,7 +51,23 @@ export const signin = async (req, res, next) => {
     if (!user) {
       return customError(400, res, "User not exists");
     }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return customError(401, res, "Invalid user credentials");
+    }
     return generateTokenAndCookie(200, res, user, "User sign in successfully");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const checkUserStatus = (req, res) => {
+  try {
+    return res.status(200).json({
+      success: true,
+      user: req.userInfo,
+    });
   } catch (error) {
     next(error);
   }
