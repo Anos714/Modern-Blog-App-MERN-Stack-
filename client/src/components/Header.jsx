@@ -11,7 +11,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <div className="sticky top-0">
       <div className="h-20 flex justify-between items-center px-4 md:px-10 border-b-2 relative z-50 transition-colors duration-300 bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-600">
         <div className="flex-shrink-0">
           <img
@@ -33,16 +33,24 @@ const Header = () => {
 
         <nav className="hidden md:block">
           <ul className="flex gap-5 list-none">
-            {["Home", "About"].map((item) => (
-              <li key={item}>
-                <a
-                  href={`/${item.toLowerCase()}`}
-                  className="font-semibold transition-all cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white"
-                >
-                  {item}
-                </a>
-              </li>
-            ))}
+            <li>
+              <a
+                href="/"
+                className="font-semibold text-lg transition-all cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Home
+              </a>
+            </li>
+            <li>
+              <a
+                href="/about"
+                className="font-semibold text-lg transition-all cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About
+              </a>
+            </li>
           </ul>
         </nav>
 

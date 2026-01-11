@@ -3,8 +3,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "../validation";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
+import { api } from "../axios";
+import { useDispatch } from "react-redux";
+import {
+  signupStart,
+  signupSuccess,
+  signupFailure,
+} from "../redux/user/userSlice";
+import toast from "react-hot-toast";
 
 const Signup = () => {
   const {
@@ -16,10 +23,22 @@ const Signup = () => {
     mode: "onChange",
   });
 
-  const { handleSignup } = useAuth();
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const handleFormSubmit = async (data) => {
-    handleSignup(data);
+    try {
+      dispatch(signupStart());
+      const response = await api.post("/user/signup", data);
+      dispatch(signupSuccess(response?.data?.user));
+      toast.success(response?.data?.msg || "User sign up successfully");
+      navigate("/");
+    } catch (error) {
+      const errorMsg = error?.response?.data?.msg || "Internal server error";
+      dispatch(signupFailure(errorMsg));
+      toast.error(errorMsg);
+    }
   };
 
   const handleGoogleLogin = () => {
@@ -27,7 +46,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+    <div className=" min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-sm w-full space-y-6 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 transition-colors duration-300">
         <div className="text-center">
           <h2 className="mt-2 text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">

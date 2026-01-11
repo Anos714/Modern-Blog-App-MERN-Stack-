@@ -4,7 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signinSchema } from "../validation";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useDispatch } from "react-redux";
+import {
+  signupStart,
+  signupSuccess,
+  signupFailure,
+} from "../redux/user/userSlice";
+import toast from "react-hot-toast";
 
 const Signin = () => {
   const {
@@ -16,10 +22,20 @@ const Signin = () => {
     mode: "onChange",
   });
 
-  const { handleSignin } = useAuth();
+  const dispatch = useDispatch();
 
   const handleFormSubmit = async (data) => {
-    handleSignin(data);
+    try {
+      dispatch(signupStart());
+      const response = await api.post("/user/signin", data);
+      dispatch(signupSuccess(response?.data?.user));
+      toast.success(response?.data?.msg || "User sign in successfully");
+      navigate("/");
+    } catch (error) {
+      const errorMsg = error?.response?.data?.msg || "Internal server error";
+      dispatch(signupFailure(errorMsg));
+      toast.error(errorMsg);
+    }
   };
 
   const handleGoogleLogin = () => {

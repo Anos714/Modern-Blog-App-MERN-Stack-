@@ -16,6 +16,16 @@ export const signup = async (req, res, next) => {
     return customError(400, res, "All fields are required");
   }
 
+  const existingUsername = await UserModel.findOne({ username });
+  if (existingUsername) {
+    return customError(400, res, "Username already taken");
+  }
+
+  const existingEmail = await UserModel.findOne({ email });
+  if (existingEmail) {
+    return customError(400, res, "Email already exists");
+  }
+
   const checkExistingUser = await UserModel.findOne({ email });
   if (checkExistingUser) {
     return customError(400, res, "User already exists");
