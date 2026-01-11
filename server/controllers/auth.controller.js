@@ -117,3 +117,20 @@ export const googleAuth = async (req, res, next) => {
     next(error);
   }
 };
+
+export const logout = async (req, res, next) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    });
+    return res.status(200).json({
+      success: true,
+      msg: "Logged out successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};

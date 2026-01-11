@@ -4,11 +4,15 @@ import { IoSearch, IoMenu, IoClose } from "react-icons/io5";
 import { MdLightMode, MdDarkMode } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+import { useSelector } from "react-redux";
+import UserDropdown from "./UserDropdown";
 
 const Header = () => {
   const { themeMode, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
+
+  const { currentUser } = useSelector((state) => state.user);
 
   return (
     <div className="sticky top-0">
@@ -66,12 +70,16 @@ const Header = () => {
             )}
           </div>
 
-          <button
-            className="hidden md:block bg-blue-700 w-25 h-10 px-4 rounded-sm text-white font-semibold hover:scale-105 transition-all cursor-pointer"
-            onClick={() => navigate("/signin")}
-          >
-            Sign In
-          </button>
+          {currentUser ? (
+            <UserDropdown />
+          ) : (
+            <button
+              className="hidden md:block bg-blue-700 w-25 h-10 px-4 rounded-sm text-white font-semibold hover:scale-105 transition-all cursor-pointer"
+              onClick={() => navigate("/signin")}
+            >
+              Sign In
+            </button>
+          )}
 
           <div
             className="md:hidden text-3xl cursor-pointer text-gray-800 dark:text-white"

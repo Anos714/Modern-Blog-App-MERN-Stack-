@@ -52,6 +52,11 @@ export const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    logout: (state) => {
+      state.loading = false;
+      state.error = null;
+      state.currentUser = null;
+    },
   },
 
   extraReducers: (builder) => {
@@ -81,5 +86,6 @@ export const {
   signinStart,
   signinSuccess,
   signinFailure,
+  logout,
 } = userSlice.actions;
 export default userSlice.reducer;

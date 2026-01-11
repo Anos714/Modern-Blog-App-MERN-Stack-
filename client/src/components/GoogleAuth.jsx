@@ -11,7 +11,7 @@ import { api } from "../axios";
 const GoogleAuth = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin = async ({ mode }) => {
     try {
       const googleProvider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, googleProvider);
