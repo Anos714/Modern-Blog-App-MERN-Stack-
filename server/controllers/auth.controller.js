@@ -16,24 +16,19 @@ export const signup = async (req, res, next) => {
     return customError(400, res, "All fields are required");
   }
 
-  const existingUsername = await UserModel.findOne({ username });
-  if (existingUsername) {
-    return customError(400, res, "Username already taken");
-  }
-
-  const existingEmail = await UserModel.findOne({ email });
-  if (existingEmail) {
-    return customError(400, res, "Email already exists");
-  }
-
-  const checkExistingUser = await UserModel.findOne({ email });
-  if (checkExistingUser) {
-    return customError(400, res, "User already exists");
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
   try {
+    const existingUsername = await UserModel.findOne({ username });
+    if (existingUsername) {
+      return customError(400, res, "Username already taken");
+    }
+
+    const checkExistingUser = await UserModel.findOne({ email });
+    if (checkExistingUser) {
+      return customError(400, res, "User already exists");
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const newlyCreatedUser = await UserModel.create({
       username,
       email,
@@ -72,12 +67,52 @@ export const signin = async (req, res, next) => {
   }
 };
 
-export const checkUserStatus = (req, res) => {
+export const checkUserStatus = (req, res, next) => {
   try {
     return res.status(200).json({
       success: true,
       user: req.userInfo,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const googleAuth = async (req, res, next) => {
+  try {
+    const { displayName, email, PhotoUrl } = req.body;
+    const user = await UserModel.findOne({ email });
+
+    if (user) {
+      return generateTokenAndCookie(
+        200,
+        res,
+        user,
+        "User google sign in successfully"
+      );
+    } else {
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+
+      const hashedPassword = await bcrypt.hash(generatedPassword, 10);
+
+      const newUser = await UserModel.create({
+        username:
+          displayName.split(" ").join("") +
+          Math.random().toString(36).slice(-4).toLowerCase(),
+        email,
+        password: hashedPassword,
+        avatar: PhotoUrl,
+      });
+
+      return generateTokenAndCookie(
+        201,
+        res,
+        newUser,
+        "User google sign up successfully"
+      );
+    }
   } catch (error) {
     next(error);
   }

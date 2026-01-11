@@ -5,6 +5,7 @@ export const generateTokenAndCookie = (statusCode, res, user, msg) => {
       userId: user._id,
       username: user.username,
       email: user.email,
+      avatar: user.avatar,
     },
     process.env.JWT_SECRET,
     {
@@ -26,6 +27,7 @@ export const generateTokenAndCookie = (statusCode, res, user, msg) => {
       _id: user._id,
       username: user.username,
       email: user.email,
+      avatar: user.avatar,
     },
   });
 };

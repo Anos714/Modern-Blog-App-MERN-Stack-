@@ -2,7 +2,6 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signinSchema } from "../validation";
-import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { api } from "../axios";
@@ -12,6 +11,7 @@ import {
   signinFailure,
 } from "../redux/user/userSlice";
 import toast from "react-hot-toast";
+import GoogleAuth from "../components/GoogleAuth";
 
 const Signin = () => {
   const {
@@ -43,10 +43,6 @@ const Signin = () => {
       dispatch(signinFailure(errorMsg));
       toast.error(errorMsg);
     }
-  };
-
-  const handleGoogleLogin = () => {
-    console.log("Google Login Clicked");
   };
 
   return (
@@ -175,14 +171,7 @@ const Signin = () => {
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={handleGoogleLogin}
-              className="w-full flex items-center justify-center px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200"
-            >
-              <FcGoogle className="h-5 w-5 mr-2" />
-              Sign in with Google
-            </button>
+            <GoogleAuth />
 
             <div className="text-center mt-4">
               <p className="text-sm text-gray-600 dark:text-gray-400">
