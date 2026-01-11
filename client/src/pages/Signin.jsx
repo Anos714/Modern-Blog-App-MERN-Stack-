@@ -3,12 +3,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signinSchema } from "../validation";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { api } from "../axios";
 import {
-  signupStart,
-  signupSuccess,
-  signupFailure,
+  signinStart,
+  signinSuccess,
+  signinFailure,
 } from "../redux/user/userSlice";
 import toast from "react-hot-toast";
 
@@ -22,18 +23,24 @@ const Signin = () => {
     mode: "onChange",
   });
 
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
 
   const handleFormSubmit = async (data) => {
     try {
-      dispatch(signupStart());
+      console.log(data);
+
+      dispatch(signinStart());
       const response = await api.post("/user/signin", data);
-      dispatch(signupSuccess(response?.data?.user));
+      console.log(response);
+
+      dispatch(signinSuccess(response?.data?.user));
       toast.success(response?.data?.msg || "User sign in successfully");
       navigate("/");
     } catch (error) {
       const errorMsg = error?.response?.data?.msg || "Internal server error";
-      dispatch(signupFailure(errorMsg));
+      dispatch(signinFailure(errorMsg));
       toast.error(errorMsg);
     }
   };
