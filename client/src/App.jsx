@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "./redux/user/userSlice";
 import Loader from "./components/Loader";
 import PublicRoute from "./components/PublicRoute";
+import PrivateRoute from "./components/PrivateRoute";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -29,7 +30,14 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/signup"
           element={

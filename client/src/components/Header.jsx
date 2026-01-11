@@ -4,8 +4,8 @@ import { IoSearch, IoMenu, IoClose } from "react-icons/io5";
 import { MdLightMode, MdDarkMode } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
-import { useSelector } from "react-redux";
 import UserDropdown from "./UserDropdown";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const { themeMode, toggleTheme } = useTheme();

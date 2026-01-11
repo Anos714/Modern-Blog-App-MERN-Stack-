@@ -69,7 +69,7 @@ const UserDropdown = () => {
           <ul className="py-1">
             <li>
               <a
-                href="/profile"
+                href="/dashboard?tab=profile"
                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
               >
                 <svg
