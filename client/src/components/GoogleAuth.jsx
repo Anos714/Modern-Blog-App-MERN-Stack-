@@ -2,7 +2,7 @@ import React from "react";
 import { FcGoogle } from "react-icons/fc";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../firebase";
-import { signupSuccess } from "../redux/user/userSlice";
+import { signupSuccess, signinSuccess } from "../redux/user/userSlice";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -15,18 +15,22 @@ const GoogleAuth = () => {
     try {
       const googleProvider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, googleProvider);
-
       const user = result.user;
-      console.log("firebase user: ", result);
 
       const response = await api.post("/user/google", user);
 
-      dispatch(signupSuccess(response?.data?.user));
-      toast.success(response?.data?.msg || "user signup successfully");
+      if (mode === "signup") {
+        dispatch(signupSuccess(response?.data?.user));
+        toast.success(response?.data?.msg || "Signup successful!");
+      } else {
+        dispatch(signinSuccess(response?.data?.user));
+        toast.success(response?.data?.msg || "Login successful!");
+      }
+
       navigate("/");
     } catch (error) {
       console.error(error);
-      const errorMsg = error.response?.data?.msg;
+      const errorMsg = error.response?.data?.msg || "Something went wrong";
       toast.error(errorMsg);
     }
   };

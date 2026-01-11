@@ -209,7 +209,7 @@ const Signup = () => {
               </div>
             </div>
 
-            <GoogleAuth/>
+            <GoogleAuth mode='signup'/>
           </div>
 
           <div className="text-center mt-4">
