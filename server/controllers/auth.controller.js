@@ -2,6 +2,7 @@ import { customError } from "../utils/customError.js";
 import bcrypt from "bcrypt";
 import { UserModel } from "../models/User.js";
 import { generateTokenAndCookie } from "../utils/generateTokenAndCookie.js";
+import { imagekit } from "../config/imageKit.js";
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -129,6 +130,102 @@ export const logout = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       msg: "Logged out successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteUser = async (req, res, next) => {
+  const { id } = req.params;
+
+  if (req.userInfo.userId !== id) {
+    return customError(403, res, "Your are forbidden to delete this user");
+  }
+
+  try {
+    const user = await UserModel.findByIdAndDelete(id);
+    if (!user) {
+      return customError(400, res, "User with this id dosen't exists");
+    }
+
+    return res.status(200).json({
+      success: true,
+      msg: "User account deleted successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateUser = async (req, res, next) => {
+  const { username, email, password } = req.body;
+  const { id } = req.params;
+  const imageFile = req.file;
+
+  if (req.userInfo.userId !== id) {
+    return customError(403, res, "Your are forbidden to update this user");
+  }
+
+  if (username) {
+    if (username.length < 3) {
+      return customError(
+        400,
+        res,
+        "Username must be atleast 3 characters long"
+      );
+    }
+  }
+
+  if (password) {
+    if (password.length < 8) {
+      return customError(
+        400,
+        res,
+        "Password must be atleast 8 characters long"
+      );
+    }
+    req.body.password = await bcrypt.hash(password, 10);
+  }
+
+  if (imageFile) {
+    const response = await imagekit.upload({
+      file: req.file.buffer,
+      fileName: req.file.originalname,
+      folder: "/user-avatar",
+    });
+
+    const imageURL = imagekit.url({
+      path: response.filePath,
+      transformation: [
+        { quality: "auto" },
+        { format: "webp" },
+        { width: "auto" },
+      ],
+    });
+
+    req.file = imageURL;
+  }
+
+  try {
+    const user = await UserModel.findByIdAndUpdate(
+      id,
+      {
+        username,
+        email,
+        avatar: req.file,
+        password,
+      },
+      { new: true }
+    );
+    if (!user) {
+      return customError(400, res, "User with this id dosen't exists");
+    }
+
+    return res.status(200).json({
+      success: true,
+      msg: "User account updated successfully",
+      user,
     });
   } catch (error) {
     next(error);

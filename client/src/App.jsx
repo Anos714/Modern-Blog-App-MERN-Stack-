@@ -37,7 +37,9 @@ const App = () => {
               <Dashboard />
             </PrivateRoute>
           }
-        />
+        >
+          <Route path='profile'/>
+          </Route>
         <Route
           path="/signup"
           element={

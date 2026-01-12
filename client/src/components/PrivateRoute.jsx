@@ -1,11 +1,11 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
+import Dashboard from "../pages/Dashboard";
 
 const PrivateRoute = ({ children }) => {
   const { currentUser } = useSelector((state) => state.user);
-  if (!currentUser) return <Navigate to="/signin" />;
-  return children;
+  return currentUser ? <Dashboard /> : <Navigate to="/signin" />;
 };
 
 export default PrivateRoute;
