@@ -5,7 +5,7 @@ import { generateTokenAndCookie } from "../utils/generateTokenAndCookie.js";
 import { imagekit } from "../config/imageKit.js";
 
 export const signup = async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, role } = req.body;
   if (
     !username ||
     !email ||
@@ -34,6 +34,7 @@ export const signup = async (req, res, next) => {
       username,
       email,
       password: hashedPassword,
+      role,
     });
     return generateTokenAndCookie(
       201,
@@ -149,6 +150,13 @@ export const deleteUser = async (req, res, next) => {
       return customError(400, res, "User with this id dosen't exists");
     }
 
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    });
+
     return res.status(200).json({
       success: true,
       msg: "User account deleted successfully",
@@ -214,7 +222,7 @@ export const updateUser = async (req, res, next) => {
         username,
         email,
         avatar: req.file,
-        password,
+        password: req.body.password,
       },
       { new: true }
     );

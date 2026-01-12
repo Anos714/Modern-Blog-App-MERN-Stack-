@@ -28,3 +28,18 @@ export const signinSchema = z.object({
     .min(1, "Password is required")
     .min(8, "Password must be at least 8 characters"),
 });
+
+export const profileSchema = z.object({
+  avatar: z.any().optional(),
+  username: z
+    .string()
+    .min(3, "Username must be at least 3 characters long")
+    .optional()
+    .or(z.literal("")),
+  email: z.string().email("Invalid email address").optional().or(z.literal("")),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .optional()
+    .or(z.literal("")),
+});

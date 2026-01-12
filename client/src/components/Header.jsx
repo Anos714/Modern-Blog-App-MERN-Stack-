@@ -121,12 +121,14 @@ const Header = () => {
               </li>
             </ul>
 
-            <button
-              className="bg-blue-700 w-3/4 h-10 rounded-sm text-white font-semibold hover:bg-blue-600 transition-all cursor-pointer"
-              onClick={() => navigate("/signin")}
-            >
-              Sign In
-            </button>
+            {currentUser ? null : (
+              <button
+                className="bg-blue-700 w-3/4 h-10 rounded-sm text-white font-semibold hover:bg-blue-600 transition-all cursor-pointer"
+                onClick={() => navigate("/signin")}
+              >
+                Sign In
+              </button>
+            )}
           </div>
         )}
       </div>

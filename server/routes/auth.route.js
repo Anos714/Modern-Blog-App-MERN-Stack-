@@ -19,6 +19,6 @@ router.get("/status", isAuthenticated, checkUserStatus);
 router.post("/google", googleAuth);
 router.post("/logout", isAuthenticated, logout);
 router.delete("/delete/:id", isAuthenticated, deleteUser);
-router.put("/update/:id", isAuthenticated, upload.single("avatar"), updateUser);
+router.put("/update/:id", upload.single("avatar"), isAuthenticated, updateUser);
 
 export const authRouter = router;

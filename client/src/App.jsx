@@ -14,6 +14,7 @@ import { loadUser } from "./redux/user/userSlice";
 import Loader from "./components/Loader";
 import PublicRoute from "./components/PublicRoute";
 import PrivateRoute from "./components/PrivateRoute";
+import Profile from "./pages/dashboard/Profile";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -38,8 +39,8 @@ const App = () => {
             </PrivateRoute>
           }
         >
-          <Route path='profile'/>
-          </Route>
+          <Route path="profile" element={<Profile />} />
+        </Route>
         <Route
           path="/signup"
           element={
