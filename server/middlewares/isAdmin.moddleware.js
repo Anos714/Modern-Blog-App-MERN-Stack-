@@ -1,4 +1,4 @@
-import { customError } from "../utils/customError";
+import { customError } from "../utils/customError.js";
 
 export const isAdmin = (req, res, next) => {
   try {

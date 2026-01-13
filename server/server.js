@@ -5,6 +5,7 @@ import cors from "cors";
 import { connectToDB } from "./database/db.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { authRouter } from "./routes/auth.route.js";
+import { blogRouter } from "./routes/blog.route.js";
 const app = express();
 const PORT = process.env.PORT || 8000;
 
@@ -22,6 +23,7 @@ app.use(
 
 //routes
 app.use("/api/user", authRouter);
+app.use("/api/blog", blogRouter);
 
 app.use(errorHandler);
 

@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 export default function DashSidebar() {
   const { currentUser } = useSelector((state) => state.user);
   return (
-    <aside className="min-h-screen w-20 md:w-56 bg-gray-50 dark:bg-gray-800 h-full">
+    <aside className="min-h-screen w-20 md:w-50 bg-gray-50 dark:bg-gray-800">
       <div className="h-full px-3 py-4 overflow-y-auto">
         <ul className="space-y-2">
           <li>
@@ -21,7 +21,7 @@ export default function DashSidebar() {
               }
             >
               <HiUser className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-              <span className="flex-1 ms-3 whitespace-nowrap hidden">
+              <span className="flex-1 ms-3 whitespace-nowrap hidden md:inline-block">
                 Profile
               </span>
               <span className="md:inline-flex hidden items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-200 rounded dark:bg-gray-700 dark:text-gray-300 ">
@@ -30,10 +30,21 @@ export default function DashSidebar() {
             </NavLink>
           </li>
 
+          {currentUser.role==='admin'?(
+             <li>
+            <div className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group cursor-pointer">
+              <HiArrowSmRight className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+              <span className="flex-1 ms-3 whitespace-nowrap hidden md:inline-block">
+                Sign Out
+              </span>
+            </div>
+          </li>
+          ):null}
+
           <li>
             <div className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group cursor-pointer">
               <HiArrowSmRight className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-              <span className="flex-1 ms-3 whitespace-nowrap hidden">
+              <span className="flex-1 ms-3 whitespace-nowrap hidden md:inline-block">
                 Sign Out
               </span>
             </div>
