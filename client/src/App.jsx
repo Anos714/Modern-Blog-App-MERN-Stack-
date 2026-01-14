@@ -15,6 +15,8 @@ import Loader from "./components/Loader";
 import PublicRoute from "./components/PublicRoute";
 import PrivateRoute from "./components/PrivateRoute";
 import Profile from "./pages/dashboard/Profile";
+import AddBlog from "./pages/dashboard/AddBlog";
+import Blog from "./pages/Blog";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -31,6 +33,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/blog" element={<Blog />} />
         <Route
           path="/dashboard"
           element={
@@ -40,6 +43,7 @@ const App = () => {
           }
         >
           <Route path="profile" element={<Profile />} />
+          <Route path="add-blog" element={<AddBlog />} />
         </Route>
         <Route
           path="/signup"

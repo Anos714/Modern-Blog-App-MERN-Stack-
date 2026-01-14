@@ -43,3 +43,11 @@ export const profileSchema = z.object({
     .optional()
     .or(z.literal("")),
 });
+
+export const blogSchema = z.object({
+  title: z.string().min(1, "title is required"),
+  subTitle: z.string().min(1, "sub title is required"),
+  category: z.string().min(1, "category is required"),
+  content: z.string().min(1, "content is required"),
+  image: z.any(),
+});
