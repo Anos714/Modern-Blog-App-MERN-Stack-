@@ -162,6 +162,7 @@ const AddBlog = () => {
               <option value="Design">Design</option>
               <option value="Development">Development</option>
               <option value="Lifestyle">Lifestyle</option>
+              <option value="Others">Others</option>
             </select>
             {errors.category && (
               <p className="mt-2 text-sm text-red-600">
