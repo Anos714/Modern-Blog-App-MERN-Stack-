@@ -1,23 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { api } from "../../axios";
-
-export const createNewBlog = createAsyncThunk(
-  "blog/create",
-  async (blogData, { rejectWithValue }) => {
-    try {
-      const response = await api.post("/blog/add", blogData);
-      return response.data;
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        "Something went wrong";
-      return rejectWithValue(message);
-    }
-  }
-);
+import { createSlice } from "@reduxjs/toolkit";
+import { createNewBlog, fetchBlogs } from "../thunks/blogThunks";
 
 const initialState = {
   blogs: [],
@@ -51,6 +33,20 @@ const blogSlice = createSlice({
         state.message = "Blog created successfully!";
       })
       .addCase(createNewBlog.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      .addCase(fetchBlogs.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchBlogs.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.blogs = action.payload;
+      })
+      .addCase(fetchBlogs.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

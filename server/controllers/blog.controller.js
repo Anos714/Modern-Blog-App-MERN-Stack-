@@ -1,6 +1,7 @@
 import { imagekit } from "../config/imageKit.js";
 import { BlogModel } from "../models/Blog.js";
 import { customError } from "../utils/customError.js";
+import readingTime from "reading-time";
 
 export const getAllBlogs = async (req, res, next) => {
   try {
@@ -73,6 +74,9 @@ export const addBlog = async (req, res, next) => {
 
     const image = imageURL;
 
+    const stats = readingTime(content);
+    const timeToRead = Math.ceil(stats.minutes);
+
     const blog = await BlogModel.create({
       title,
       subTitle,
@@ -80,6 +84,7 @@ export const addBlog = async (req, res, next) => {
       image,
       category,
       author: req.userInfo.userId,
+      readTime: timeToRead,
     });
 
     return res.status(201).json({

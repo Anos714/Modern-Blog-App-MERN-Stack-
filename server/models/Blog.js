@@ -30,7 +30,12 @@ const BlogSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    readTime: {
+      type: Number,
+      default: 1,
+    },
   },
+
   { timestamps: true }
 );
 

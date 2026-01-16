@@ -1,6 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBlogs } from "../redux/thunks/blogThunks";
+import moment from "moment";
 
 const HomePage = () => {
+  const dispatch = useDispatch();
+  const blogs = useSelector((state) => state.blog.blogs);
+  console.log(blogs);
+
+  useEffect(() => {
+    dispatch(fetchBlogs());
+  }, []);
+
   const featuredPost = {
     id: 1,
     title: "Bun vs Node.js: The New King of Backend?",
@@ -13,39 +24,6 @@ const HomePage = () => {
     date: "Jan 14, 2026",
     readTime: "5 min read",
   };
-
-  const otherPosts = [
-    {
-      id: 2,
-      title: "Mastering Redux Toolkit",
-      subtitle: "State management made easy with slices and thunks.",
-      image:
-        "https://images.unsplash.com/photo-1593720213428-28a5b9e94613?q=80&w=1000",
-      category: "Coding",
-      date: "Jan 10, 2026",
-      readTime: "8 min read",
-    },
-    {
-      id: 3,
-      title: "The Ultimate Guide to Tailwind CSS",
-      subtitle: "How to build modern UIs without leaving your HTML.",
-      image:
-        "https://images.unsplash.com/photo-1587620962725-abab7fe55159?q=80&w=1000",
-      category: "Design",
-      date: "Jan 08, 2026",
-      readTime: "4 min read",
-    },
-    {
-      id: 4,
-      title: "React 19: What's New?",
-      subtitle: "A look into the compiler and server actions.",
-      image:
-        "https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=1000",
-      category: "Technology",
-      date: "Jan 05, 2026",
-      readTime: "6 min read",
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -155,9 +133,9 @@ const HomePage = () => {
             Recent Posts
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {otherPosts.map((post) => (
+            {blogs?.map((post) => (
               <div
-                key={post.id}
+                key={post._id}
                 className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full"
               >
                 <div className="h-48 overflow-hidden relative">
@@ -190,7 +168,7 @@ const HomePage = () => {
                           d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                         ></path>
                       </svg>
-                      {post.date}
+                      {moment(post.createdAt).format("ll")}
                     </span>
                     <span className="flex items-center">
                       <svg
@@ -207,7 +185,7 @@ const HomePage = () => {
                           d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                         ></path>
                       </svg>
-                      {post.readTime}
+                      {post.readTime} min read
                     </span>
                   </div>
 
