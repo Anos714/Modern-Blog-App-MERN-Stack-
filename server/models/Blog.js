@@ -34,6 +34,11 @@ const BlogSchema = new mongoose.Schema(
       type: Number,
       default: 1,
     },
+    isFeatured: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
   },
 
   { timestamps: true }

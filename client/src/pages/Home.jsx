@@ -1,29 +1,32 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchBlogs } from "../redux/thunks/blogThunk";
+import { fetchBlogs, fetchFeaturedBlogs } from "../redux/thunks/blogThunk";
 import moment from "moment";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const blogs = useSelector((state) => state.blog.blogs);
+  const { blogs, isFeatured } = useSelector((state) => state.blog);
 
   useEffect(() => {
     dispatch(fetchBlogs());
+    dispatch(fetchFeaturedBlogs());
   }, []);
 
-  const featuredPost = {
-    id: 1,
-    title: "Bun vs Node.js: The New King of Backend?",
-    subtitle:
-      "Exploring why Bun is 4x faster and why you should care about the new JavaScript runtime.",
-    image:
-      "https://images.unsplash.com/photo-1629904853716-f004c37748fa?q=80&w=1000",
-    category: "Development",
-    author: "Rahul Sharma",
-    date: "Jan 14, 2026",
-    readTime: "5 min read",
-  };
+  console.log(isFeatured);
+
+  // const featuredPost = {
+  //   id: 1,
+  //   title: "Bun vs Node.js: The New King of Backend?",
+  //   subtitle:
+  //     "Exploring why Bun is 4x faster and why you should care about the new JavaScript runtime.",
+  //   image:
+  //     "https://images.unsplash.com/photo-1629904853716-f004c37748fa?q=80&w=1000",
+  //   category: "Development",
+  //   author: "Rahul Sharma",
+  //   date: "Jan 14, 2026",
+  //   readTime: "5 min read",
+  // };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -42,52 +45,27 @@ const HomePage = () => {
           <h2 className="text-2xl font-bold mb-6 border-l-4 border-blue-600 pl-4">
             Featured Post
           </h2>
-          <div className="group relative w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 flex flex-col md:flex-row h-auto md:h-[400px]">
-            <div className="w-full md:w-1/2 h-64 md:h-full overflow-hidden">
-              <img
-                src={featuredPost.image}
-                alt={featuredPost.title}
-                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-
-            <div className="w-full md:w-1/2 p-8 flex flex-col justify-center">
-              <div className="flex items-center space-x-2 mb-4">
-                <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                  {featuredPost.category}
-                </span>
-                <span className="flex items-center text-xs text-gray-500 dark:text-gray-400">
-                  <svg
-                    className="w-3.5 h-3.5 mr-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
-                  {featuredPost.readTime}
-                </span>
+          {isFeatured?.map((featuredPost) => (
+            <div
+              key={featuredPost._id}
+              className="group relative w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 flex flex-col md:flex-row h-auto md:h-[400px]"
+            >
+              <div className="w-full md:w-1/2 h-64 md:h-full overflow-hidden">
+                <img
+                  src={featuredPost.image}
+                  alt={featuredPost.title}
+                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                />
               </div>
 
-              <h3 className="text-3xl font-bold mb-4 group-hover:text-blue-600 transition-colors">
-                {featuredPost.title}
-              </h3>
-
-              <p className="text-gray-600 dark:text-gray-300 mb-6 text-lg line-clamp-3">
-                {featuredPost.subtitle}
-              </p>
-
-              <div className="flex items-center justify-between mt-auto">
-                <div className="flex items-center">
-                  <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center mr-3">
+              <div className="w-full md:w-1/2 p-8 flex flex-col justify-center">
+                <div className="flex items-center space-x-2 mb-4">
+                  <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                    {featuredPost.category}
+                  </span>
+                  <span className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                     <svg
-                      className="w-6 h-6 text-gray-600"
+                      className="w-3.5 h-3.5 mr-1"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -97,35 +75,56 @@ const HomePage = () => {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth="2"
-                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                       ></path>
                     </svg>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">{featuredPost.author}</p>
-                    <p className="text-xs text-gray-500">{featuredPost.date}</p>
-                  </div>
+                    {featuredPost.readTime} min read
+                  </span>
                 </div>
-                <button className="flex items-center text-blue-600 hover:text-blue-800 font-semibold transition-colors">
-                  Read Article
-                  <svg
-                    className="w-4 h-4 ml-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M14 5l7 7m0 0l-7 7m7-7H3"
-                    ></path>
-                  </svg>
-                </button>
+
+                <h3 className="text-3xl font-bold mb-4 group-hover:text-blue-600 transition-colors">
+                  {featuredPost.title}
+                </h3>
+
+                <p className="text-gray-600 dark:text-gray-300 mb-6 text-lg line-clamp-3">
+                  {featuredPost.subTitle}
+                </p>
+
+                <div className="flex items-center justify-between mt-auto">
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center mr-3">
+                      <img src={featuredPost.author.avatar} alt="" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">
+                        {featuredPost.author.username}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {moment(featuredPost.createdAt).format("ll")}
+                      </p>
+                    </div>
+                  </div>
+                  <button className="flex items-center text-blue-600 hover:text-blue-800 font-semibold transition-colors">
+                    Read Article
+                    <svg
+                      className="w-4 h-4 ml-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
 
         <div>

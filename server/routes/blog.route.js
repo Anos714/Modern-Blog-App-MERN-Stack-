@@ -5,13 +5,15 @@ import {
   addBlog,
   updateBlog,
   deleteBlog,
-} from "../controllers/Blog.controller.js";
+  getFeaturedBlog,
+} from "../controllers/blog.controller.js";
 import { isAuthenticated } from "../middlewares/isAuthenticated.middleware.js";
 import { isAdmin } from "../middlewares/isAdmin.moddleware.js";
 import { upload } from "../config/multer.js";
 const router = Router();
 
 router.get("/all", getAllBlogs);
+router.get("/featured", getFeaturedBlog);
 router.get("/:id", getBlogById);
 router.post("/add", upload.single("image"), isAuthenticated, isAdmin, addBlog);
 router.patch(

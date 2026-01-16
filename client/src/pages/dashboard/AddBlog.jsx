@@ -35,6 +35,7 @@ const AddBlog = () => {
     formData.append("subTitle", data.subTitle);
     formData.append("category", data.category);
     formData.append("content", data.content);
+    formData.append("isFeatured", data.isFeatured);
 
     dispatch(createNewBlog(formData));
   };
@@ -199,6 +200,18 @@ const AddBlog = () => {
                 {errors.content.message}
               </p>
             )}
+
+            <div className="mt-10 mx-5 flex gap-2">
+              <input
+                type="checkbox"
+                name="isFeatured"
+                id="isFeatured"
+                {...register("isFeatured")}
+              />
+              <label htmlFor="isFeatured" className="font-semibold">
+                isFeatured
+              </label>
+            </div>
           </div>
 
           <button

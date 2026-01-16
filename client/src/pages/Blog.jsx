@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchBlogById } from "../redux/thunks/blogThunk";
 import moment from "moment";
+import { useTheme } from "../context/ThemeContext";
 
 const Blog = () => {
   const dispatch = useDispatch();
   const post = useSelector((state) => state.blog.blog);
   console.log(post);
   const { blogId } = useParams();
+  const { themeMode } = useTheme();
 
   useEffect(() => {
     dispatch(fetchBlogById(blogId));
@@ -122,7 +124,7 @@ const Blog = () => {
 
       <div
         className="prose dark:prose-invert max-w-none mb-12"
-        data-color-mode="dark"
+        data-color-mode={themeMode === "light" ? "light" : "dark"}
       >
         <MDEditor.Markdown
           source={post?.content}
@@ -131,6 +133,7 @@ const Blog = () => {
             color: "inherit",
             fontSize: "1.1rem",
             lineHeight: "1.8",
+            whiteSpace: "pre-wrap",
           }}
         />
       </div>

@@ -5,7 +5,7 @@ import readingTime from "reading-time";
 
 export const getAllBlogs = async (req, res, next) => {
   try {
-    const blogs = await BlogModel.find()
+    const blogs = await BlogModel.find({ isFeatured: false })
       .populate({
         path: "author",
         select: "-password",
@@ -41,7 +41,7 @@ export const getBlogById = async (req, res, next) => {
 };
 
 export const addBlog = async (req, res, next) => {
-  const { title, subTitle, content, category } = req.body;
+  const { title, subTitle, content, category, isFeatured } = req.body;
   const imageFile = req.file;
   if (
     !title ||
@@ -85,6 +85,7 @@ export const addBlog = async (req, res, next) => {
       category,
       author: req.userInfo.userId,
       readTime: timeToRead,
+      isFeatured,
     });
 
     return res.status(201).json({
@@ -169,6 +170,24 @@ export const deleteBlog = async (req, res, next) => {
       msg: "Blog deleted successfully",
       blog,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getFeaturedBlog = async (req, res, next) => {
+  try {
+    const blog = await BlogModel.findOne({ isFeatured: true })
+      .populate("author")
+      .sort({
+        createdAt: -1,
+      });
+
+    if (!blog) {
+      return res.status(404).json({ message: "No featured blog found" });
+    }
+
+    res.status(200).json({ success: true, blog });
   } catch (error) {
     next(error);
   }

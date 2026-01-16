@@ -38,6 +38,23 @@ export const fetchBlogById = createAsyncThunk(
   async (blogId, { rejectWithValue }) => {
     try {
       const response = await api.get(`/blog/${blogId}`);
+
+      return response.data.blog;
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.msg) ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
+    }
+  }
+);
+
+export const fetchFeaturedBlogs = createAsyncThunk(
+  "blog/fetchFeaturedBlogs",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get("/blog/featured");
       console.log(response);
       return response.data.blog;
     } catch (error) {

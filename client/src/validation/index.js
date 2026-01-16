@@ -50,4 +50,5 @@ export const blogSchema = z.object({
   category: z.string().min(1, "category is required"),
   content: z.string().min(1, "content is required"),
   image: z.any(),
+  isFeatured: z.boolean(),
 });
