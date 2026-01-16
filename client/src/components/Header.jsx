@@ -15,7 +15,7 @@ const Header = () => {
   const { currentUser } = useSelector((state) => state.user);
 
   return (
-    <div className="sticky top-0">
+    <div className="sticky top-0 z-20">
       <div className="h-20 flex justify-between items-center px-4 md:px-10 border-b-2 relative z-50 transition-colors duration-300 bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-600">
         <div className="flex-shrink-0">
           <img

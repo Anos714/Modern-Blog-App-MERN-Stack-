@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchBlogs } from "../redux/thunks/blogThunks";
+import { fetchBlogs } from "../redux/thunks/blogThunk";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 const HomePage = () => {
   const dispatch = useDispatch();
   const blogs = useSelector((state) => state.blog.blogs);
-  console.log(blogs);
 
   useEffect(() => {
     dispatch(fetchBlogs());
@@ -29,7 +29,7 @@ const HomePage = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
       <div className="w-full py-16 md:py-24 text-center px-4">
         <h1 className="text-4xl md:text-6xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
-          Welcome to DevBlog
+          Welcome to BitBlogs
         </h1>
         <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
           Discover stories, thinking, and expertise from writers on any topic.
@@ -197,9 +197,11 @@ const HomePage = () => {
                     {post.subtitle}
                   </p>
 
-                  <button className="text-sm font-semibold text-purple-600 dark:text-purple-400 hover:underline mt-auto self-start">
-                    Read More
-                  </button>
+                  <Link to={`blog/${post._id}`}>
+                    <button className="text-sm font-semibold text-purple-600 dark:text-purple-400 hover:underline mt-auto self-start">
+                      Read More
+                    </button>
+                  </Link>
                 </div>
               </div>
             ))}

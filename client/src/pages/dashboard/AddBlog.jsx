@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { blogSchema } from "../../validation";
 import MDEditor from "@uiw/react-md-editor";
 import { useSelector, useDispatch } from "react-redux";
-import { createNewBlog } from "../../redux/thunks/blogThunks";
+import { createNewBlog } from "../../redux/thunks/blogThunk";
 import { useNavigate } from "react-router-dom";
 
 const AddBlog = () => {

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createNewBlog, fetchBlogs } from "../thunks/blogThunks";
+import { createNewBlog, fetchBlogById, fetchBlogs } from "../thunks/blogThunk";
 
 const initialState = {
   blogs: [],
@@ -47,6 +47,20 @@ const blogSlice = createSlice({
         state.blogs = action.payload;
       })
       .addCase(fetchBlogs.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      .addCase(fetchBlogById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchBlogById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.blog = action.payload;
+      })
+      .addCase(fetchBlogById.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
