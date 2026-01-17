@@ -17,6 +17,8 @@ import PrivateRoute from "./components/PrivateRoute";
 import Profile from "./pages/dashboard/Profile";
 import AddBlog from "./pages/dashboard/AddBlog";
 import Blog from "./pages/Blog";
+import AllUsers from "./pages/dashboard/Users";
+import Comments from "./pages/dashboard/Comments";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -44,6 +46,8 @@ const App = () => {
         >
           <Route path="profile" element={<Profile />} />
           <Route path="add-blog" element={<AddBlog />} />
+          <Route path="users" element={<AllUsers />} />
+          <Route path="comments" element={<Comments />} />
         </Route>
         <Route
           path="/signup"

@@ -2,6 +2,7 @@ import { HiUser, HiArrowSmRight } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { FaPlusCircle } from "react-icons/fa";
+import { Command, Users } from "lucide-react";
 
 export default function DashSidebar() {
   const { currentUser } = useSelector((state) => state.user);
@@ -32,27 +33,64 @@ export default function DashSidebar() {
           </li>
 
           {currentUser.role === "admin" ? (
-            <li>
-              <NavLink
-                to="/dashboard/add-blog"
-                end
-                className={({ isActive }) =>
-                  `flex items-center p-2 rounded-lg group ${
-                    isActive
-                      ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
-                      : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-                  }`
-                }
-              >
-                <FaPlusCircle className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                <span className="flex-1 ms-3 whitespace-nowrap hidden md:inline-block">
-                  Add blog
-                </span>
-                {/* <span className="md:inline-flex hidden items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-200 rounded dark:bg-gray-700 dark:text-gray-300 ">
-                  {currentUser.role}
-                </span> */}
-              </NavLink>
-            </li>
+            <div className="flex flex-col gap-2">
+              <li>
+                <NavLink
+                  to="/dashboard/add-blog"
+                  end
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-lg group ${
+                      isActive
+                        ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
+                        : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                    }`
+                  }
+                >
+                  <FaPlusCircle className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                  <span className="flex-1 ms-3 whitespace-nowrap hidden md:inline-block">
+                    Add blog
+                  </span>
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/dashboard/users"
+                  end
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-lg group ${
+                      isActive
+                        ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
+                        : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                    }`
+                  }
+                >
+                  <Users size={25} />
+                  <span className="flex-1 ms-3 whitespace-nowrap hidden md:inline-block">
+                    All users
+                  </span>
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/dashboard/comments"
+                  end
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-lg group ${
+                      isActive
+                        ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
+                        : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                    }`
+                  }
+                >
+                  <Command size={25} />
+                  <span className="flex-1 ms-3 whitespace-nowrap hidden md:inline-block">
+                    Comments
+                  </span>
+                </NavLink>
+              </li>
+            </div>
           ) : null}
 
           <li>
