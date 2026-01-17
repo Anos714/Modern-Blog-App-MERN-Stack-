@@ -3,14 +3,15 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { blogSchema } from "../../validation";
 import MDEditor from "@uiw/react-md-editor";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { createNewBlog } from "../../redux/thunks/blogThunk";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const AddBlog = () => {
-  const { isSuccess, isError, message } = useSelector;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -37,7 +38,16 @@ const AddBlog = () => {
     formData.append("content", data.content);
     formData.append("isFeatured", data.isFeatured);
 
-    dispatch(createNewBlog(formData));
+    const toastId = toast.loading("Creating your blog...");
+
+    try {
+      await dispatch(createNewBlog(formData)).unwrap();
+
+      toast.success("Blog created successfully!", { id: toastId });
+      navigate("/");
+    } catch (error) {
+      toast.error(error || "Failed to create blog", { id: toastId });
+    }
   };
 
   return (

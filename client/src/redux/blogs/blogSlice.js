@@ -9,7 +9,7 @@ import {
 const initialState = {
   blogs: [],
   blog: null,
-  isFeatured: [],
+  isFeatured: null,
   isLoading: false,
   isSuccess: false,
   isError: false,
@@ -77,7 +77,7 @@ const blogSlice = createSlice({
       .addCase(fetchFeaturedBlogs.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.isFeatured.push(action.payload);
+        state.isFeatured = action.payload;
       })
       .addCase(fetchFeaturedBlogs.rejected, (state, action) => {
         state.isLoading = false;

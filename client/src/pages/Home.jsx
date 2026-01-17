@@ -13,21 +13,6 @@ const HomePage = () => {
     dispatch(fetchFeaturedBlogs());
   }, []);
 
-  console.log(isFeatured);
-
-  // const featuredPost = {
-  //   id: 1,
-  //   title: "Bun vs Node.js: The New King of Backend?",
-  //   subtitle:
-  //     "Exploring why Bun is 4x faster and why you should care about the new JavaScript runtime.",
-  //   image:
-  //     "https://images.unsplash.com/photo-1629904853716-f004c37748fa?q=80&w=1000",
-  //   category: "Development",
-  //   author: "Rahul Sharma",
-  //   date: "Jan 14, 2026",
-  //   readTime: "5 min read",
-  // };
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
       <div className="w-full py-16 md:py-24 text-center px-4">
@@ -41,19 +26,20 @@ const HomePage = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 border-l-4 border-blue-600 pl-4">
-            Featured Post
-          </h2>
-          {isFeatured?.map((featuredPost) => (
+        {isFeatured ? (
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold mb-6 border-l-4 border-blue-600 pl-4">
+              Featured Post
+            </h2>
+
             <div
-              key={featuredPost._id}
+              key={isFeatured?._id}
               className="group relative w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 flex flex-col md:flex-row h-auto md:h-[400px]"
             >
               <div className="w-full md:w-1/2 h-64 md:h-full overflow-hidden">
                 <img
-                  src={featuredPost.image}
-                  alt={featuredPost.title}
+                  src={isFeatured?.image}
+                  alt={isFeatured?.title}
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
@@ -61,7 +47,7 @@ const HomePage = () => {
               <div className="w-full md:w-1/2 p-8 flex flex-col justify-center">
                 <div className="flex items-center space-x-2 mb-4">
                   <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                    {featuredPost.category}
+                    {isFeatured?.category}
                   </span>
                   <span className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                     <svg
@@ -78,29 +64,29 @@ const HomePage = () => {
                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                       ></path>
                     </svg>
-                    {featuredPost.readTime} min read
+                    {isFeatured?.readTime} min read
                   </span>
                 </div>
 
                 <h3 className="text-3xl font-bold mb-4 group-hover:text-blue-600 transition-colors">
-                  {featuredPost.title}
+                  {isFeatured?.title}
                 </h3>
 
                 <p className="text-gray-600 dark:text-gray-300 mb-6 text-lg line-clamp-3">
-                  {featuredPost.subTitle}
+                  {isFeatured?.subTitle}
                 </p>
 
                 <div className="flex items-center justify-between mt-auto">
                   <div className="flex items-center">
                     <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center mr-3">
-                      <img src={featuredPost.author.avatar} alt="" />
+                      <img src={isFeatured?.author.avatar} alt="" />
                     </div>
                     <div>
                       <p className="text-sm font-medium">
-                        {featuredPost.author.username}
+                        {isFeatured?.author?.username}
                       </p>
                       <p className="text-xs text-gray-500">
-                        {moment(featuredPost.createdAt).format("ll")}
+                        {moment(isFeatured?.createdAt).format("ll")}
                       </p>
                     </div>
                   </div>
@@ -124,9 +110,8 @@ const HomePage = () => {
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-
+          </div>
+        ) : null}
         <div>
           <h2 className="text-2xl font-bold mb-6 border-l-4 border-purple-600 pl-4">
             Recent Posts
@@ -193,7 +178,7 @@ const HomePage = () => {
                   </h3>
 
                   <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-3 flex-grow">
-                    {post.subtitle}
+                    {post.subTitle}
                   </p>
 
                   <Link to={`blog/${post._id}`}>
