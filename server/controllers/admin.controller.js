@@ -58,3 +58,22 @@ export const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const deleteComment = async (req, res, next) => {
+  const { commentId } = req.params;
+
+  try {
+    const comment = await CommentModel.findByIdAndDelete(commentId);
+    if (!comment) {
+      return customError(400, res, "comment doesn't found with this id");
+    }
+
+    return res.status(200).json({
+      success: true,
+      msg: "comment deleted successfully",
+      comment,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
