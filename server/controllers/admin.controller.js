@@ -1,5 +1,6 @@
 import { CommentModel } from "../models/Comment.js";
 import { UserModel } from "../models/User.js";
+import { customError } from "../utils/customError.js";
 
 export const allUsers = async (req, res, next) => {
   try {
@@ -33,6 +34,25 @@ export const allComments = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       comments,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteUser = async (req, res, next) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await UserModel.findByIdAndDelete(userId);
+    if (!user) {
+      return customError(400, res, "user doesn't found with this id");
+    }
+
+    return res.status(200).json({
+      success: true,
+      msg: "user deleted successfully",
+      user,
     });
   } catch (error) {
     next(error);
