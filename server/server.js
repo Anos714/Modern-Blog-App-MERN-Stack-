@@ -7,6 +7,7 @@ import { errorHandler } from "./middlewares/errorHandler.js";
 import { authRouter } from "./routes/auth.route.js";
 import { blogRouter } from "./routes/blog.route.js";
 import { commentRouter } from "./routes/comment.route.js";
+import { adminRouter } from "./routes/admin.route.js";
 const app = express();
 const PORT = process.env.PORT || 8000;
 
@@ -19,13 +20,14 @@ app.use(
     origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
-  })
+  }),
 );
 
 //routes
 app.use("/api/user", authRouter);
 app.use("/api/blog", blogRouter);
 app.use("/api/comment", commentRouter);
+app.use("/api/admin", adminRouter);
 
 app.use(errorHandler);
 
