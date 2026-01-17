@@ -31,9 +31,12 @@ export const allComments = async (req, res, next) => {
       })
       .populate("blogId")
       .sort({ createdAt: -1 });
+    const totalComments = await CommentModel.find({}).countDocuments();
+
     return res.status(200).json({
       success: true,
       comments,
+      totalComments,
     });
   } catch (error) {
     next(error);

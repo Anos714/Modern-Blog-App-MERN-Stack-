@@ -1,55 +1,47 @@
 import React, { useState, useEffect } from "react";
 import { Trash2, Search, AlertTriangle, X } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteUser, showAllUsers } from "../../redux/thunks/adminThunk";
+import toast from "react-hot-toast";
+import moment from "moment";
 
 const AllUsers = () => {
-  const [users, setUsers] = useState([
-    {
-      id: "1",
-      name: "John Doe",
-      email: "john@example.com",
-      role: "Admin",
-      joined: "2023-01-15",
-    },
-    {
-      id: "3",
-      name: "Mike Ross",
-      email: "mike.r@firm.com",
-      role: "User",
-      joined: "2023-05-10",
-    },
-    {
-      id: "4",
-      name: "Sarah Connor",
-      email: "s.connor@resistance.com",
-      role: "User",
-      joined: "2023-08-01",
-    },
-    {
-      id: "6",
-      name: "Rachel Zane",
-      email: "rachel@firm.com",
-      role: "User",
-      joined: "2023-11-20",
-    },
-  ]);
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state.admin.users);
+
+  const handleShowUser = async () => {
+    try {
+      await dispatch(showAllUsers()).unwrap();
+    } catch (error) {
+      toast.error("Users not found");
+    }
+  };
+
+  useEffect(() => {
+    handleShowUser();
+  }, []);
+
+  console.log(state);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteId, setDeleteId] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const filteredUsers = users.filter(
+  const filteredUsers = state?.users?.filter(
     (user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+      user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     setIsDeleting(true);
-    setTimeout(() => {
-      setUsers(users.filter((u) => u.id !== deleteId));
+    try {
+      await dispatch(deleteUser(deleteId)).unwrap();
       setDeleteId(null);
       setIsDeleting(false);
-    }, 600);
+    } catch (error) {
+      toast.error("Something wrong occurred, Please try again");
+    }
   };
 
   return (
@@ -70,14 +62,16 @@ const AllUsers = () => {
               <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
                 Total Accounts
               </p>
-              <h3 className="text-2xl font-bold mt-1">{users.length}</h3>
+              <h3 className="text-2xl font-bold mt-1">
+                {state?.totalUsersCount}
+              </h3>
             </div>
             <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
               <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
                 Administrators
               </p>
               <h3 className="text-2xl font-bold mt-1 text-indigo-600 dark:text-indigo-400">
-                {users.filter((u) => u.role === "Admin").length}
+                {state?.adminUserCount}
               </h3>
             </div>
           </div>
@@ -98,7 +92,7 @@ const AllUsers = () => {
                 />
               </div>
               <div className="text-sm text-slate-500 dark:text-slate-400 font-medium">
-                Showing {filteredUsers.length} results
+                Showing {filteredUsers?.length} results
               </div>
             </div>
 
@@ -117,26 +111,30 @@ const AllUsers = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {filteredUsers.length > 0 ? (
-                    filteredUsers.map((user) => (
+                  {filteredUsers?.length > 0 ? (
+                    filteredUsers?.map((user) => (
                       <tr
-                        key={user.id}
+                        key={user._id}
                         className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors group"
                       >
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <div
                               className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-sm ${
-                                user.role === "Admin"
+                                user.role === "admin"
                                   ? "bg-indigo-600 dark:bg-indigo-500"
                                   : "bg-slate-400 dark:bg-slate-600"
                               }`}
                             >
-                              {user.name.charAt(0)}
+                              <img
+                                src={user.avatar}
+                                alt="user"
+                                className="rounded-full h-full w-full"
+                              />
                             </div>
                             <div>
                               <p className="font-semibold text-slate-800 dark:text-slate-200">
-                                {user.name}
+                                {user.username}
                               </p>
                               <p className="text-xs text-slate-500 dark:text-slate-400">
                                 {user.email}
@@ -147,7 +145,7 @@ const AllUsers = () => {
                         <td className="px-6 py-4">
                           <span
                             className={`text-xs font-bold px-2.5 py-1 rounded-lg ${
-                              user.role === "Admin"
+                              user.role === "admin"
                                 ? "bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-900/30"
                                 : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400"
                             }`}
@@ -156,11 +154,11 @@ const AllUsers = () => {
                           </span>
                         </td>
                         <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
-                          {user.joined}
+                          {moment(user.createdAt).format("ll")}
                         </td>
                         <td className="px-6 py-4 text-right">
                           <button
-                            onClick={() => setDeleteId(user.id)}
+                            onClick={() => setDeleteId(user._id)}
                             className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
                             title="Delete User"
                           >
@@ -207,7 +205,7 @@ const AllUsers = () => {
             <p className="text-slate-500 dark:text-slate-400 mb-8">
               Are you sure you want to delete{" "}
               <span className="font-bold text-slate-700 dark:text-slate-200">
-                {users.find((u) => u.id === deleteId)?.name}
+                {state.users.find((u) => u._id === deleteId)?.username}
               </span>
               ? Their account data will be permanently purged from the system.
             </p>
