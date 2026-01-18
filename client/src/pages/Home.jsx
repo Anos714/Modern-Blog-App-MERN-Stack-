@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchBlogs, fetchFeaturedBlogs } from "../redux/thunks/blogThunk";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import Loader from "../components/Loader";
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const { blogs, isFeatured } = useSelector((state) => state.blog);
+  const { blogs, isFeatured, isLoading } = useSelector((state) => state.blog);
 
   useEffect(() => {
     dispatch(fetchBlogs());

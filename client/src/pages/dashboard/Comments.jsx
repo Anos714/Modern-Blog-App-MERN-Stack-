@@ -1,7 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Trash2, Search, AlertTriangle, X, MessageCircle } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { showAllComments } from "../../redux/thunks/adminThunk";
 
 const Comments = () => {
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state.admin);
+
+  const handleShowComments = async () => {
+    try {
+      await dispatch(showAllComments()).unwrap();
+    } catch (error) {
+      toast.error("Users not found");
+    }
+  };
+
+  useEffect(() => {
+    handleShowComments();
+  }, []);
+
+  console.log(state);
+
   const [comments, setComments] = useState([
     {
       id: "1",
@@ -50,7 +69,7 @@ const Comments = () => {
     (comment) =>
       comment.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       comment.blogTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      comment.content.toLowerCase().includes(searchTerm.toLowerCase())
+      comment.content.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const handleDelete = () => {

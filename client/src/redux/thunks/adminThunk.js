@@ -34,3 +34,21 @@ export const deleteUser = createAsyncThunk(
     }
   },
 );
+
+export const showAllComments = createAsyncThunk(
+  "admin/showAllComments",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get("/admin/comments");
+      console.log(response);
+
+      return response?.data;
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.msg) ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
+    }
+  },
+);

@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { deleteUser, showAllUsers } from "../thunks/adminThunk";
+import {
+  deleteUser,
+  showAllComments,
+  showAllUsers,
+} from "../thunks/adminThunk";
 
 const initialState = {
   users: null,
@@ -33,6 +37,18 @@ const adminSlice = createSlice({
         state.loading = false;
       })
       .addCase(deleteUser.rejected, (state, action) => {
+        state.error = action.payload;
+        state.loading = false;
+      })
+
+      .addCase(showAllComments.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(showAllComments.fulfilled, (state, action) => {
+        state.comments = action.payload;
+        state.loading = false;
+      })
+      .addCase(showAllComments.rejected, (state, action) => {
         state.error = action.payload;
         state.loading = false;
       });

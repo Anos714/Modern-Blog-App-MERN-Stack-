@@ -7,7 +7,7 @@ import { Command, Users } from "lucide-react";
 export default function DashSidebar() {
   const { currentUser } = useSelector((state) => state.user);
   return (
-    <aside className="min-h-screen w-20 md:w-50 bg-gray-50 dark:bg-gray-800">
+    <aside className="min-h-screen w-20 md:w-50 bg-gray-50 dark:bg-gray-800 border-r-1 border-gray-300">
       <div className="h-full px-3 py-4 overflow-y-auto">
         <ul className="space-y-2">
           <li>
