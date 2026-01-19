@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { addComment, getCommentsByBlogId } from "../thunks/commentThunk";
 
 const initialState = {
-  comments: null,
+  comments: [],
   loading: true,
   error: null,
   message: "",
@@ -30,7 +30,7 @@ const commentSlice = createSlice({
         state.loading = true;
       })
       .addCase(addComment.fulfilled, (state, action) => {
-        state.message = action.payload;
+        state.comments.push(action.payload);
         state.loading = false;
       })
       .addCase(addComment.rejected, (state, action) => {
