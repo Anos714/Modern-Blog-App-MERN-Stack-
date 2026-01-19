@@ -40,6 +40,8 @@ export const getCommentsByBlogId = async (req, res, next) => {
 export const addComment = async (req, res, next) => {
   const { comment } = req.body;
   const { blogId } = req.params;
+  console.log(req.userInfo.userId);
+
   if (!comment || comment === "") {
     return customError(400, res, "comment field required");
   }

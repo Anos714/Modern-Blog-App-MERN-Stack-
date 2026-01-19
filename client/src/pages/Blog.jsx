@@ -1,49 +1,41 @@
 import React, { useEffect, useState } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchBlogById } from "../redux/thunks/blogThunk";
 import moment from "moment";
 import { useTheme } from "../context/ThemeContext";
+import Loader from "../components/Loader";
+import { addComment, getCommentsByBlogId } from "../redux/thunks/commentThunk";
+import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 
 const Blog = () => {
   const dispatch = useDispatch();
   const post = useSelector((state) => state.blog.blog);
-  console.log(post);
+  const loading = useSelector((state) => state.blog.isLoading);
+  const comments = useSelector((state) => state.comment.comments);
+  const user = useSelector((state) => state.user.currentUser);
   const { blogId } = useParams();
   const { themeMode } = useTheme();
 
   useEffect(() => {
     dispatch(fetchBlogById(blogId));
+    dispatch(getCommentsByBlogId(blogId));
   }, []);
-  const [blog, setBlog] = useState(null);
-  const [comment, setComment] = useState("");
+  console.log(comments);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
+  const navigate = useNavigate();
+
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(128);
-
-  const dummyComments = [
-    {
-      id: 1,
-      username: "Alex Johnson",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
-      text: "This article really helped me understand the core concepts. The explanation about the useEffect hook was particularly clear!",
-      date: "2 hours ago",
-    },
-    {
-      id: 2,
-      username: "Sarah Williams",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-      text: "Great read! Could you please make a follow-up post about advanced state management? I think that would be very beneficial.",
-      date: "5 hours ago",
-    },
-    {
-      id: 3,
-      username: "Michael Chen",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
-      text: "I faced a similar issue in my last project. Thanks for sharing the solution.",
-      date: "1 day ago",
-    },
-  ];
 
   const handleLikeToggle = () => {
     if (isLiked) {
@@ -54,10 +46,21 @@ const Blog = () => {
     setIsLiked(!isLiked);
   };
 
-  const handleCommentSubmit = (e) => {
-    e.preventDefault();
-    setComment("");
+  const handleCommentSubmit = async (data) => {
+    if (!user) {
+      toast.error("Login first to post comment");
+      return navigate("/signin");
+    }
+    try {
+      await dispatch(addComment({ blogId, data })).unwrap();
+      toast.success("comment added");
+      reset();
+    } catch (error) {
+      toast.error("something went wrong", error);
+    }
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div className="max-w-4xl mx-auto p-5 bg-white dark:bg-gray-900 min-h-screen text-gray-900 dark:text-gray-100">
@@ -117,7 +120,7 @@ const Blog = () => {
                 d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"
               />
             </svg>
-            <span className="font-medium">{dummyComments.length}</span>
+            <span className="font-medium">{comments?.length}</span>
           </button>
         </div>
       </div>
@@ -143,13 +146,16 @@ const Blog = () => {
           Leave a Comment
         </h3>
 
-        <form onSubmit={handleCommentSubmit} className="flex flex-col gap-4">
+        <form
+          onSubmit={handleSubmit(handleCommentSubmit)}
+          className="flex flex-col gap-4"
+        >
           <textarea
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            name="comment"
             placeholder="Write your thoughts here..."
             className="w-full p-4 rounded-xl border border-gray-300 bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none h-32"
             required
+            {...register("comment")}
           ></textarea>
 
           <div className="flex justify-end">
@@ -165,30 +171,32 @@ const Blog = () => {
 
       <div className="mt-12">
         <h3 className="text-xl font-bold mb-6 text-gray-900 dark:text-white">
-          Recent Comments ({dummyComments.length})
+          {comments && comments.length > 0
+            ? `Recent Comments (${comments?.length})`
+            : null}
         </h3>
         <div className="space-y-6">
-          {dummyComments.map((comm) => (
+          {comments?.map((comm) => (
             <div
-              key={comm.id}
+              key={comm._id}
               className="flex gap-4 p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800"
             >
               <img
-                src={comm.avatar}
-                alt={comm.username}
+                src={comm.userId.avatar}
+                alt={comm.userId.username}
                 className="w-10 h-10 rounded-full object-cover shrink-0"
               />
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-1">
                   <h4 className="font-semibold text-gray-900 dark:text-white">
-                    {comm.username}
+                    {comm.userId.username}
                   </h4>
                   <span className="text-xs text-gray-500 dark:text-gray-400">
-                    {comm.date}
+                    {moment(comm.createdAt).fromNow()}
                   </span>
                 </div>
                 <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
-                  {comm.text}
+                  {comm.comment}
                 </p>
               </div>
             </div>

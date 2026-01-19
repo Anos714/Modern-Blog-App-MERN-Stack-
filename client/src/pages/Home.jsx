@@ -14,6 +14,8 @@ const HomePage = () => {
     dispatch(fetchFeaturedBlogs());
   }, []);
 
+  if (isLoading) return <Loader />;
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
       <div className="w-full py-16 md:py-24 text-center px-4">
@@ -80,7 +82,11 @@ const HomePage = () => {
                 <div className="flex items-center justify-between mt-auto">
                   <div className="flex items-center">
                     <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center mr-3">
-                      <img src={isFeatured?.author.avatar} alt="" />
+                      <img
+                        src={isFeatured?.author.avatar}
+                        alt="avatar"
+                        className="rounded-full w-full h-full"
+                      />
                     </div>
                     <div>
                       <p className="text-sm font-medium">
@@ -91,23 +97,25 @@ const HomePage = () => {
                       </p>
                     </div>
                   </div>
-                  <button className="flex items-center text-blue-600 hover:text-blue-800 font-semibold transition-colors">
-                    Read Article
-                    <svg
-                      className="w-4 h-4 ml-1"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M14 5l7 7m0 0l-7 7m7-7H3"
-                      ></path>
-                    </svg>
-                  </button>
+                  <Link to={`blog/${isFeatured._id}`}>
+                    <button className="flex items-center text-blue-600 hover:text-blue-800 font-semibold transition-colors">
+                      Read Article
+                      <svg
+                        className="w-4 h-4 ml-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        ></path>
+                      </svg>
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
