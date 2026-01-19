@@ -54,6 +54,7 @@ const Blog = () => {
     try {
       await dispatch(addComment({ blogId, data })).unwrap();
       toast.success("comment added");
+      dispatch(getCommentsByBlogId(blogId));
       reset();
     } catch (error) {
       toast.error("something went wrong", error);
