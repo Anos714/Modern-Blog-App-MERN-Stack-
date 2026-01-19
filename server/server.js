@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["https://bit-blogs-omega.vercel.app", "http://localhost:8080"],
+    origin: ["https://bit-blogs-omega.vercel.app", "http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
   }),
