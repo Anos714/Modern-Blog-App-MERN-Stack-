@@ -24,6 +24,7 @@ app.use(
 );
 
 //routes
+
 app.use("/api/user", authRouter);
 app.use("/api/blog", blogRouter);
 app.use("/api/comment", commentRouter);
